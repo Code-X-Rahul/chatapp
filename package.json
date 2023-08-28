@@ -1,0 +1,26 @@
+{
+  "name": "chatapp-backend",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --watch \"*.ts\" --exec \"ts-node\" ./src/server.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "lint": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@tsconfig/node-lts": "^18.12.5",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.7",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.48.0",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
