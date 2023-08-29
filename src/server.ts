@@ -12,19 +12,12 @@ import connectDb from "./db/db";
 const app = express();
 const server = http.createServer(app);
 
+// set the view engine to ejs
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
+
 app.use("/", viewRouter);
 app.use("/auth", authRouter);
-
-// set the view engine to ejs
-// app.set("view engine", "ejs");
-
-app.get("/", (req: any, res: any) => {
-  res.sendFile(__dirname + "/view/index.html");
-});
-
-app.get("/chat", (req: any, res: any) => {
-  res.render(__dirname + "/view/personalChat.html");
-});
 
 const io = new Server(server);
 
@@ -58,7 +51,7 @@ personalChat.on("connection", (socket: any) => {
 
 const connect = async () => {
   try {
-    // await connectDb(process.env.MONGO_URI!);
+    await connectDb(process.env.MONGO_URI!);
     server.listen(3000, () => {
       console.log("listening on *:3000");
     });
