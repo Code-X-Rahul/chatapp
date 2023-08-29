@@ -1,18 +1,32 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+import authRouter from "./routes/authRoutes";
+import viewRouter from "./routes/viewRoutes";
+import connectDb from "./db/db";
 
 const app = express();
 const server = http.createServer(app);
 
-const io = new Server(server);
+app.use("/", viewRouter);
+app.use("/auth", authRouter);
+
+// set the view engine to ejs
+// app.set("view engine", "ejs");
 
 app.get("/", (req: any, res: any) => {
   res.sendFile(__dirname + "/view/index.html");
 });
-app.get("/hello", (req: any, res: any) => {
-  res.sendFile(__dirname + "/view/personalChat.html");
+
+app.get("/chat", (req: any, res: any) => {
+  res.render(__dirname + "/view/personalChat.html");
 });
+
+const io = new Server(server);
 
 io.on("connection", (socket: any) => {
   console.log("a user connected");
@@ -42,6 +56,15 @@ personalChat.on("connection", (socket: any) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log("listening on *:3000");
-});
+const connect = async () => {
+  try {
+    // await connectDb(process.env.MONGO_URI!);
+    server.listen(3000, () => {
+      console.log("listening on *:3000");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+connect();
