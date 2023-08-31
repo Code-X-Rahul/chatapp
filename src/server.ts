@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from "express";
 import connectDb from "./db/db";
 require("dotenv").config();
 const express = require("express");
