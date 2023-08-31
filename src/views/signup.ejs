@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Chatty</title>
+  </head>
+  <body>
+    <img id="background" src="/background.jpg" alt="" />
+    <div class="login-Container">
+      <h1>Log in</h1>
+      <form id="login-Form" method="post" action="/auth/login">
+        <input
+          class="inputField"
+          type="text"
+          placeholder="Username"
+          required
+          id="username"
+          name="username"
+          autocomplete="username"
+        />
+        <input
+          class="inputField"
+          type="password"
+          minlength="8"
+          placeholder="Password"
+          id="new-password"
+          name="password"
+          autocomplete="new-password"
+          required
+        />
+        <div class="buttomContainer">
+          <button class="formBtn" type="submit">Login</button>
+        </div>
+        <p class="signupLink">
+          Not a member? <button id="signupBtn" type="button">Sign Up</button>
+        </p>
+      </form>
+    </div>
+
+    <div class="signup-Container">
+      <h1>Sign Up</h1>
+      <form id="signup-Form" method="post" action="/auth/signup">
+        <input
+          class="inputField"
+          type="text"
+          placeholder="Username"
+          required
+          id="username"
+          name="username"
+          autocomplete="username"
+        />
+        <input
+          class="inputField"
+          type="password"
+          minlength="8"
+          placeholder="Password"
+          id="new-password"
+          name="password"
+          autocomplete="new-password"
+          required
+        />
+        <input
+          class="inputField"
+          type="password"
+          minlength="8"
+          placeholder="Confirm Password"
+          required
+        />
+        <div class="buttomContainer">
+          <button class="formBtn" id="loginBtn" type="button">Login</button>
+          <button class="formBtn signUp" type="submit">Sign Up</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="/main.js"></script>
+  </body>
+</html>
