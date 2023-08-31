@@ -1,9 +1,39 @@
-import express from "express";
+import express, { Request, Response } from "express";
+import passport from "passport";
+
+const User = require("../model/userModel");
 
 const router = express.Router();
 
-router.route("/login").post(()=>{
-    console.log("hitted login route")
-})
+router.post("/signup", (req: Request, res: Response) => {
+  User.register(
+    new User({ username: req.body.username }),
+    req.body.password,
+    (err: unknown, user: any) => {
+      if (err) {
+        console.error(err);
+        return res.render("signup");
+      }
+      passport.authenticate("local")(req, res, () => {
+        res.redirect("/");
+      });
+    }
+  );
+});
 
-export default router;
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/signup",
+  }),
+  (req: Request, res: Response) => {}
+);
+
+router.get("/logout", (req: Request, res: Response) => {
+  req.logout(function () {
+    res.redirect("/signup");
+  });
+});
+
+module.exports = router;

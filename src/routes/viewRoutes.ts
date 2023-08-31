@@ -1,12 +1,21 @@
-import express from "express";
+import express, { Request, Response } from "express";
 const router = express.Router();
 
-router.get("/", (req: any, res: any) => {
+// const { isLoggedIn } = require("../middlewares/authMiddleware");
+
+router.get("/", (req: Request, res: Response) => {
   res.render("index");
 });
 
-router.get("/hello", (req: any, res: any) => {
-  res.render("personalChat");
+router.get("/login", function (req: Request, res: Response) {
+  res.render("login");
 });
 
-export default router;
+router.get("/signup", function (req: Request, res: Response) {
+  res.render("signup");
+});
+
+// router.get("/", isLoggedIn, (req: Request, res: Response) => {
+//   res.render("index");
+// });
+module.exports = router;
