@@ -10,27 +10,28 @@
   <img id="background" src="image/background.jpg" alt="">
   <div class="login-Container">
     <h1>Log in</h1>
-    <form id="login-Form" action="">
+    <form id="login-Form" action="login/auth">
       <input class="inputField" type="text" placeholder="Username" required>
       <input class="inputField" type="password" minlength="8" placeholder="Password" required>
+      <div class="buttomContainer">
+        <button class="formBtn" type="submit">Login</button>
+      </div>
+      <p class="signupLink">Not a member? <button id="signupBtn" type="button">Sign Up</button></p>
     </form>
-    <div class="buttomContainer">
-      <button class="formBtn" type="submit">Login</button>
-    </div>
-    <p class="signupLink">Not a member? <button id="signupBtn" type="button">Sign Up</button></p>
+    
   </div>
 
   <div class="signup-Container">
     <h1>Sign Up</h1>
-    <form id="login-Form" action="">
+    <form id="login-Form" action="signup/auth">
       <input class="inputField" type="text" placeholder="Username" required>
       <input class="inputField" type="password" minlength="8" placeholder="Password" required>
       <input class="inputField" type="password" minlength="8" placeholder="Confirm Password" required>
+      <div class="buttomContainer">
+        <button class="formBtn" id="loginBtn" type="button">Login</button>
+        <button class="formBtn signUp" type="submit">Sign Up</button>
+      </div>
     </form>
-    <div class="buttomContainer">
-      <button class="formBtn" id="loginBtn" type="button">Login</button>
-      <button class="formBtn signUp" type="submit">Sign Up</button>
-    </div>
   </div>
   
   <script src="index.js"></script>
