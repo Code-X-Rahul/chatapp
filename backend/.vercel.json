@@ -1,6 +1,27 @@
+
 {
-  "version": 2,
-  "name": "native-server",
-  "builds": [{ "src": "./backend/app.js", "use": "@vercel/node" }],
-  "routes": [{ "src": "./backend/(.*)", "dest": "app.js" }]
-}
+    "version": 2,
+    "name": "native-server",
+    "builds": [
+      {
+        "src": "frontend/**",
+        "use": "@vercel/static-build",
+        "config": {}
+      },
+      {
+        "src": "backend/**",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/.*",
+        "dest": "backend/server.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "frontend/$1"
+      }
+    ]
+  }
+  
