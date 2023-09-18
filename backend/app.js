@@ -29,8 +29,8 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.get("/", (req, res) => {
   res.send("Welcome to the chatapp backend");
 });
-app.delete("/", async(req, res) => {
-  const success = await User.deleteMany({});
+app.get("/api/v1/getUsers", async (req, res) => {
+  const success = await User.find({});
   res.send(success);
   res.send("Welcome to the chatapp backend");
 });
