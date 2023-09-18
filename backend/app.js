@@ -31,8 +31,7 @@ app.get("/", (req, res) => {
 });
 app.get("/api/v1/getUsers", async (req, res) => {
   const success = await User.find({});
-  res.send(success);
-  res.send("Welcome to the chatapp backend");
+  res.json(success);
 });
 
 app.use("/api/v1/auth", authRouter);
