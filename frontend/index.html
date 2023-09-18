@@ -1,39 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Chatty</title>
-</head>
-<body>
-  <img id="background" src="image/background.jpg" alt="">
-  <div class="login-Container">
-    <h1>Log in</h1>
-    <form id="login-Form" action="login/auth">
-      <input class="inputField" type="text" placeholder="Username" required>
-      <input class="inputField" type="password" minlength="8" placeholder="Password" required>
-      <div class="buttomContainer">
-        <button class="formBtn" type="submit">Login</button>
-      </div>
-      <p class="signupLink">Not a member? <button id="signupBtn" type="button">Sign Up</button></p>
-    </form>
-    
-  </div>
-
-  <div class="signup-Container">
-    <h1>Sign Up</h1>
-    <form id="login-Form" action="signup/auth">
-      <input class="inputField" type="text" placeholder="Username" required>
-      <input class="inputField" type="password" minlength="8" placeholder="Password" required>
-      <input class="inputField" type="password" minlength="8" placeholder="Confirm Password" required>
-      <div class="buttomContainer">
-        <button class="formBtn" id="loginBtn" type="button">Login</button>
-        <button class="formBtn signUp" type="submit">Sign Up</button>
-      </div>
-    </form>
-  </div>
-  
-  <script src="index.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
