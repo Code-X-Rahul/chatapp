@@ -20,12 +20,18 @@ const userRouter = require("./routes/userRoutes");
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
+const User = require("./models/User");
 
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
 app.get("/", (req, res) => {
+  res.send("Welcome to the chatapp backend");
+});
+app.delete("/", async(req, res) => {
+  const success = await User.deleteMany({});
+  res.send(success);
   res.send("Welcome to the chatapp backend");
 });
 

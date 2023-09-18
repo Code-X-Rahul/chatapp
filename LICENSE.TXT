@@ -1,0 +1,52 @@
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+This license governs the use and distribution of the Chatty (the "Software").
+
+1. Definitions:
+
+   "Software" refers to the Chatee software, including all code, documentation, and associated files.
+
+   "You" means the individual or legal entity exercising the permissions granted by this License.
+
+2. License Grant:
+
+   This Software is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+   This Software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along with this Software. If not, see <https://www.gnu.org/licenses/>.
+
+3. Permissions:
+
+   a) You may use, modify, and distribute the Software.
+
+   b) You must retain all copyright notices and disclaimers present in the Software.
+
+   c) If you distribute any modified versions of the Software, you must:
+
+      i) Make the source code of the modified version available to anyone receiving the Software, and
+
+      ii) License the modified version under the terms of this GPLv3 license or, at your option, any later version.
+
+4. Limitations:
+
+   a) This license does not grant you any trademark rights or copyrights other than those provided herein. You are solely responsible for ensuring that your use or distribution of the Software does not infringe on third-party rights.
+
+   b) The Software may be subject to patents held by third parties. The licenses provided under this agreement do not grant you any rights under these patents, nor do they guarantee that your use of the Software will be free from any patent claims.
+
+5. Termination:
+
+   This License will terminate automatically if you fail to comply with its terms and conditions. Upon termination, you must cease all use, distribution, and possession of the Software.
+
+6. Disclaimer:
+
+   THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. Governing Law:
+
+   This License is governed by and construed in accordance with the laws of India. Any disputes relating to this License shall be subject to the exclusive jurisdiction of the courts of India.
+
+Rahul
+rr611305@gmail.com
+29 August 2023
