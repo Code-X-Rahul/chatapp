@@ -22,12 +22,23 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const User = require("./models/User");
 
-app.use(cors());
+app.set("trust proxy", 1);
+
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials:  true
+}
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
 app.get("/", (req, res) => {
   res.send("Welcome to the chatapp backend");
+});
+
+app.delete("/", async (req, res) => {
+  const total = await User.deleteMany({});
+  res.json(total);
 });
 app.get("/api/v1/getUsers", async (req, res) => {
   const success = await User.find({});

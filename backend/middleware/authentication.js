@@ -5,6 +5,7 @@ const { attachCookiesToResponse } = require("../utils");
 const authenticateUser = async (req, res, next) => {
   const { refreshToken, accessToken } = req.signedCookies;
   console.log(refreshToken, accessToken);
+  // console.log(req);
 
   try {
     if (accessToken) {
