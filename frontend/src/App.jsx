@@ -1,33 +1,73 @@
-import { useState } from 'react'
+import { useState , useEffect} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import "./style.css"
 import './App.css'
+import Auth from './Auth'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loginDetails, setLoginDetails] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [signUpDetails, setSignUpDetails] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  })
+  const {username, password} = loginDetails
+  const {username: signupUsername, email, password: signupPassword, confirmPassword} = signUpDetails
+
+
+  const loginInputHandler = (e) => {  
+    setLoginDetails((prev) => ({...prev, [e.target.name]: e.target.value}))
+  }
+
+  const signupInputHandler = (e) => {  
+    setSignUpDetails((prev) => ({...prev, [e.target.name]: e.target.value}))
+  }
+
+  const loginHandler = (e) => {
+  //  e.preventDefault()
+    method: "POST"
+    fetch("http://localhost:5000", {
+      body: {
+        username,
+        password,
+      }
+    })
+    console.log("submitted");
+  };
+
+  const signupHandler = (e) => {
+    // e.preventDefault()
+     fetch("http://localhost:5000", {
+       body: {
+         username,
+         email,
+         password,
+        confirmPassword,
+       }
+     })
+     console.log("Sign Up");
+   };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Auth 
+        loginInputHandler={loginInputHandler}
+        loginHandler={loginHandler}
+        username={username}
+        password={password}
+        signupUsername={signupUsername}
+        email={email}
+        signupPassword={signupPassword}
+        confirmPassword={confirmPassword}
+        signupInputHandler={signupInputHandler}
+        signupHandler={signupHandler}
+      />
     </>
   )
 }
