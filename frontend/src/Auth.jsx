@@ -12,7 +12,7 @@ const Auth = ({loginInputHandler,loginHandler,email,password, name,signupEmail,s
               className="inputField loginUsername" 
               type="email" 
               name='email'
-              placeholder="Username" 
+              placeholder="Name" 
               required
               value={email}
               onChange={loginInputHandler} 
