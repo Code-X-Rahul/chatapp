@@ -7,18 +7,18 @@ import Auth from './Auth'
 
 function App() {
   const [loginDetails, setLoginDetails] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
   const [signUpDetails, setSignUpDetails] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   })
-  const {username, password} = loginDetails
-  const {username: signupUsername, email, password: signupPassword, confirmPassword} = signUpDetails
+  const {email, password} = loginDetails
+  const {name, signupEmail, password: signupPassword, confirmPassword} = signUpDetails
 
 
   const loginInputHandler = (e) => {  
@@ -34,7 +34,7 @@ function App() {
     method: "POST"
     fetch("http://localhost:5000", {
       body: {
-        username,
+        email,
         password,
       }
     })
@@ -42,13 +42,13 @@ function App() {
   };
 
   const signupHandler = (e) => {
-    // e.preventDefault()
+    // e.preventDefault()x`
      fetch("http://localhost:5000", {
        body: {
-         username,
-         email,
+         name,
+         signupEmail,
          password,
-        confirmPassword,
+         confirmPassword,
        }
      })
      console.log("Sign Up");
@@ -59,10 +59,10 @@ function App() {
       <Auth 
         loginInputHandler={loginInputHandler}
         loginHandler={loginHandler}
-        username={username}
-        password={password}
-        signupUsername={signupUsername}
         email={email}
+        password={password}
+        name={name}
+        signupEmail={signupEmail}
         signupPassword={signupPassword}
         confirmPassword={confirmPassword}
         signupInputHandler={signupInputHandler}

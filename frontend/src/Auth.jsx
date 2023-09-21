@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Auth = ({loginInputHandler,loginHandler,username,password, signupUsername,email,signupPassword,confirmPassword,signupInputHandler,signupHandler}) => {
+const Auth = ({loginInputHandler,loginHandler,email,password, name,signupEmail,signupPassword,confirmPassword,signupInputHandler,signupHandler}) => {
   return (
     <>
       <img id="background" src="image/background.jpg" alt=""></img>
@@ -10,11 +10,11 @@ const Auth = ({loginInputHandler,loginHandler,username,password, signupUsername,
         <form id="login-Form" action="login/auth" onSubmit={loginHandler}  >
           <input 
               className="inputField loginUsername" 
-              type="text" 
-              name='username'
+              type="email" 
+              name='email'
               placeholder="Username" 
               required
-              value={username}
+              value={email}
               onChange={loginInputHandler} 
           />
           <input 
@@ -46,19 +46,19 @@ const Auth = ({loginInputHandler,loginHandler,username,password, signupUsername,
           <input 
               className="inputField" 
               type="text" 
-              name='username'
-              placeholder="Username" 
+              name='name'
+              placeholder="Name" 
               required
-              value={signupUsername}
+              value={name}
               onChange={signupInputHandler}
           />
           <input 
               className='inputField' 
-              name='email'
+              name='signupEmail'
               type='email' 
               placeholder='Email Address' 
               required
-              value={email}
+              value={signupEmail}
               onChange={signupInputHandler}
           />
           <input 
