@@ -5,7 +5,7 @@ import Background from "./components/Background";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import api from "./api/data";
-import { Route, Routes, Link } from "react-router-dom";
+import { Route, Routes, Link, useNavigate } from "react-router-dom";
 
 function App() {
   const [loginDetails, setLoginDetails] = useState({
@@ -19,6 +19,10 @@ function App() {
     password: "",
     confirmPassword: "",
   });
+
+
+  const navigate = useNavigate()
+
   const { email, password } = loginDetails;
   const {
     name,
@@ -38,7 +42,7 @@ function App() {
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/login", loginDetails);
+      const response = await api.post("/api/v1/auth/login", loginDetails);
       if (response.status === 200) {
         console.log("Login successful.");
       } else {
@@ -55,7 +59,11 @@ function App() {
 
   const signupHandler = async (e) => {
     try {
-      const response = await api.post("/register", signUpDetails);
+      const response = await api.post("/api/v1/auth/register", signUpDetails);
+      if (response.status !== 200) {
+        throw new Error("Failed to something")
+      }
+      console.log(response.data);
       setSignUpDetails({
         name: "",
         email: "",
