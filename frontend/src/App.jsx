@@ -1,9 +1,11 @@
-import { useState , useEffect} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import "./style.css"
-import './App.css'
-import Auth from './Auth'
+import { useState, useEffect, useRef } from "react";
+import "./style.css";
+import "./App.css";
+import Background from "./components/Background";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import api from "./api/data";
+import { Route, Routes, Link } from "react-router-dom";
 
 function App() {
   const [loginDetails, setLoginDetails] = useState({
@@ -16,60 +18,86 @@ function App() {
     email: "",
     password: "",
     confirmPassword: "",
-  })
-  const {email, password} = loginDetails
-  const {name, signupEmail, password: signupPassword, confirmPassword} = signUpDetails
+  });
+  const { email, password } = loginDetails;
+  const {
+    name,
+    email: signupEmail,
+    password: signupPassword,
+    confirmPassword,
+  } = signUpDetails;
 
-
-  const loginInputHandler = (e) => {  
-    setLoginDetails((prev) => ({...prev, [e.target.name]: e.target.value}))
-  }
-
-  const signupInputHandler = (e) => {  
-    setSignUpDetails((prev) => ({...prev, [e.target.name]: e.target.value}))
-  }
-
-  const loginHandler = (e) => {
-  //  e.preventDefault()
-    method: "POST"
-    fetch("http://localhost:5000", {
-      body: {
-        email,
-        password,
-      }
-    })
-    console.log("submitted");
+  const loginInputHandler = (e) => {
+    setLoginDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const signupHandler = (e) => {
-    // e.preventDefault()x`
-     fetch("http://localhost:5000", {
-       body: {
-         name,
-         signupEmail,
-         password,
-         confirmPassword,
-       }
-     })
-     console.log("Sign Up");
-   };
+  const signupInputHandler = (e) => {
+    setSignUpDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/login", loginDetails);
+      if (response.status === 200) {
+        console.log("Login successful.");
+      } else {
+        console.log("Invalid Credentials.");
+      }
+      setLoginDetails({
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      console.log("Login Failed", error.message);
+    }
+  };
+
+  const signupHandler = async (e) => {
+    try {
+      const response = await api.post("/register", signUpDetails);
+      setSignUpDetails({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.log(error.response.status);
+      console.log(error.message);
+    }
+  };
 
   return (
-    <>
-      <Auth 
-        loginInputHandler={loginInputHandler}
-        loginHandler={loginHandler}
-        email={email}
-        password={password}
-        name={name}
-        signupEmail={signupEmail}
-        signupPassword={signupPassword}
-        confirmPassword={confirmPassword}
-        signupInputHandler={signupInputHandler}
-        signupHandler={signupHandler}
-      />
-    </>
-  )
+    <Routes>
+      <Route>
+        <Route
+          index
+          element={
+            <Login
+              email={email}
+              password={password}
+              loginInputHandler={loginInputHandler}
+              loginHandler={loginHandler}
+            />
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Register
+              name={name}
+              signupEmail={signupEmail}
+              signupPassword={signupPassword}
+              confirmPassword={confirmPassword}
+              signupInputHandler={signupInputHandler}
+              signupHandler={signupHandler}
+            />
+          }
+        />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
