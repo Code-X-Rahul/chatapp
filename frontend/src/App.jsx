@@ -1,13 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import "./style.css";
-import "./App.css";
-import Background from "./components/Background";
+import "./css/chatContainer.css";
+import "./css/conContainer.css";
+import "./css/sidebar.css";
+import "./css/main.css";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Home from "./components/Home";
 import api from "./api/data";
 import { Route, Routes, Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [loginDetails, setLoginDetails] = useState({
     email: "",
     password: "",
@@ -19,9 +25,6 @@ function App() {
     password: "",
     confirmPassword: "",
   });
-
-
-  const navigate = useNavigate()
 
   const { email, password } = loginDetails;
   const {
@@ -41,27 +44,36 @@ function App() {
 
   const loginHandler = async (e) => {
     e.preventDefault();
+    const loading = toast.loading("Checking For Credentials");
+    setIsLoading(true);
     try {
       const response = await api.post("/api/v1/auth/login", loginDetails);
+
       if (response.status === 200) {
-        console.log("Login successful.");
-      } else {
-        console.log("Invalid Credentials.");
+        toast.dismiss(loading);
+        toast.success("Login Successful");
+        setTimeout(() => {
+          navigate("/Home");
+        }, 1000);
       }
       setLoginDetails({
         email: "",
         password: "",
       });
     } catch (error) {
-      console.log("Login Failed", error.message);
+      toast.dismiss(loading);
+      toast.error("Invalid Credentials!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const signupHandler = async (e) => {
+  const signupHandler = async () => {
     try {
       const response = await api.post("/api/v1/auth/register", signUpDetails);
-      if (response.status !== 200) {
-        throw new Error("Failed to something")
+      if (response.status == 201) {
+        toast.success(response.data.msg);
+        console.log("asd");
       }
       console.log(response.data);
       setSignUpDetails({
@@ -73,6 +85,8 @@ function App() {
     } catch (error) {
       console.log(error.response.status);
       console.log(error.message);
+      console.log(error.response.data.msg);
+      toast.error(error.response.data.msg);
     }
   };
 
@@ -87,6 +101,7 @@ function App() {
               password={password}
               loginInputHandler={loginInputHandler}
               loginHandler={loginHandler}
+              isLoading={isLoading}
             />
           }
         />
@@ -103,6 +118,7 @@ function App() {
             />
           }
         />
+        <Route path="Home" element={<Home />} />
       </Route>
     </Routes>
   );

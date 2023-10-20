@@ -6,10 +6,14 @@
 
 #root,
 body {
-  height: 93vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#root {
+  width: 100vw;
 }
 
 .background {
@@ -101,6 +105,7 @@ h1 {
   color: white;
   font-size: 16px;
   margin-top: 15px;
+  text-align: center;
 }
 
 .signupLink a {
@@ -109,6 +114,7 @@ h1 {
   height: 40px;
   font-size: 22px;
   padding: 0 5px;
+  text-decoration: none;
 }
 
 .signupLink a:hover {
@@ -130,6 +136,26 @@ h1 {
 
 .inputField:focus {
   background-color: rgb(255, 255, 255);
+}
+
+.passwordInput {
+  position: relative;
+  width: 100%;
+  display: flex;
+  height: 48px;
+}
+
+.loginPassword {
+  flex-grow: 1;
+}
+
+.hidePassword {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 25px;
+  height: 25px;
+  transform: translateY(-50%);
 }
 
 .formBtn {

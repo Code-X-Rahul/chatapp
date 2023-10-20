@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const Register = ({
   name,
@@ -23,6 +24,7 @@ const Register = ({
 
   return (
     <>
+      <Toaster />
       <img
         className="background"
         src="image/background.jpg"
@@ -72,7 +74,10 @@ const Register = ({
             onChange={signupInputHandler}
           />
           {!passwordMatch && (
-            <p className="password-mismatch-error" style={{ color: "red" }}>
+            <p
+              className="password-mismatch-error"
+              style={{ color: "red", textAlign: "center" }}
+            >
               Passwords do not match.
             </p>
           )}
