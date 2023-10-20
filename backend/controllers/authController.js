@@ -146,7 +146,10 @@ const forgotPassword = async (req, res) => {
   if (user) {
     const passwordToken = crypto.randomBytes(70).toString("hex");
     // send email
-    const origin = "http://localhost:3000";
+    const origin =
+      process.env.NODE_ENV === "production"
+        ? "https://chatapp-frontend-rho.vercel.app/"
+        : "http://localhost:3000";
     await sendResetPasswordEmail({
       name: user.name,
       email: user.email,

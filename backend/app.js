@@ -20,7 +20,14 @@ const authRouter = require("./routes/authRoutes");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://chatapp-frontend-rho.vercel.app/",
+      "http://localhost:3000",
+    ],
+  })
+);
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
