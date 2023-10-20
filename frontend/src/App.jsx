@@ -10,6 +10,7 @@ import Home from "./components/Home";
 import api from "./api/data";
 import { Route, Routes, Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import Verify from "./components/Verify";
 
 function App() {
   const navigate = useNavigate();
@@ -119,6 +120,7 @@ function App() {
           }
         />
         <Route path="Home" element={<Home />} />
+        <Route path="/user/verify-email" element={<Verify />} />
       </Route>
     </Routes>
   );
