@@ -19,7 +19,7 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
     secure: process.env.NODE_ENV === "production",
     signed: true,
     expires: new Date(Date.now() + oneDay),
-    sameSite:  process.env.NODE_ENV === "production" && "None",
+    // sameSite:  process.env.NODE_ENV === "production" && "None",
   });
 
   res.cookie("refreshToken", refreshTokenJWT, {
@@ -27,7 +27,7 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
     secure: process.env.NODE_ENV === "production",
     signed: true,
     expires: new Date(Date.now() + longerExp),
-    sameSite: process.env.NODE_ENV === "production" && "None",
+    // sameSite: process.env.NODE_ENV === "production" && "None",
   });
 };
 // const attachSingleCookieToResponse = ({ res, user }) => {
