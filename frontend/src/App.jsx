@@ -69,6 +69,10 @@ function App() {
     }
   };
 
+
+
+
+
   const signupHandler = async () => {
     try {
       const response = await api.post("/api/v1/auth/register", signUpDetails);
