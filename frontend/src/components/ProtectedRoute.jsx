@@ -1,17 +1,14 @@
 import React from "react";
 import { useUser } from "../context/userContext";
-import { Route, redirect } from "react-router-dom";
+import { Navigate, Route, redirect } from "react-router-dom";
 
-const PrivateRoute = ({ children, ...rest }) => {
+const ProtectedRoute = ({ Page }) => {
   const { state } = useUser();
-  return (
-    <Route
-      {...rest}
-      render={() => {
-        return state ? children : <redirect to="/"></redirect>;
-      }}
-    ></Route>
-  );
+
+  return (state ? <Page /> : <Navigate to={'/'} />)
+
+
+
 };
 
-export default PrivateRoute;
+export default ProtectedRoute;
