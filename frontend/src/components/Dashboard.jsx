@@ -1,6 +1,6 @@
 import React from "react";
 
-const Home = () => {
+const Dashboard = () => {
   return (
     <div className="home-Container">
       <div className="sidebar">
@@ -368,4 +368,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;
