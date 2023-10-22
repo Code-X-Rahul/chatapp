@@ -32,7 +32,7 @@ const Login = () => {
         toast.dismiss(loading);
         toast.success("Login Successful");
         setTimeout(() => {
-          navigate("/Home");
+          navigate("/dashboard");
         }, 1000);
       }
       setLoginDetails({

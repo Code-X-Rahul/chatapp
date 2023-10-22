@@ -1,14 +1,11 @@
 import React from "react";
 import { useUser } from "../context/userContext";
-import { Navigate, Route, redirect } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ Page }) => {
-  const { state } = useUser();
+const ProtectedRoute = () => {
+  const { user } = useUser();
 
-  return (state ? <Page /> : <Navigate to={'/'} />)
-
-
-
+  return user ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

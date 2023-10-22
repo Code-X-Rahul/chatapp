@@ -4,15 +4,16 @@ import api from "../api/data";
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [state, setState] = useState(null);
+  const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = async () => {
     try {
       const response = await api.get("/api/v1/users/showMe");
-      setState(response.state);
+      console.log(response);
+      setUser(response.data.user);
     } catch (error) {
-      setState(null);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -32,7 +33,7 @@ const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ state, setState, isLoading, logoutUser }}>
+    <UserContext.Provider value={{ user, setUser, isLoading, logoutUser }}>
       {children}
     </UserContext.Provider>
   );
