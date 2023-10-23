@@ -36,6 +36,7 @@ const userRouter = require("./routes/userRoutes");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const User = require("./models/User");
+const { authenticateUser } = require("./middleware/authentication");
 
 app.set("trust proxy", 1);
 
@@ -70,8 +71,72 @@ app.use(errorHandlerMiddleware);
 
 //chat setup
 
-io.on("connection", () => {
-  console.log("connected");
+// io.use((socket, next) => {
+//   // Use the cookie-parser middleware to parse cookies
+//   cookieParser(process.env.JWT_SECRET)(socket.request, socket.request.res, (err) => {
+//     if (err) {
+//       return next(new Error("Cookie parsing failed"));
+//     }
+//     // Call the authenticateUser middleware function
+//     authenticateUser(socket.request, socket.request.res, (err) => {
+//       if (err) {
+//         // If authentication fails, terminate the connection
+//         return next(new Error("Authentication failed"));
+//       }
+//       // If authentication is successful, continue with the connection
+//       next();
+//     });
+//   });
+// });
+
+// io.on("connection", (socket) => {
+//   console.log("connected");
+//   // console.log(socket?.user);
+
+//   socket.on("disconnect", () => {
+//     console.log(`${socket.id} disconnected`);
+//   });
+
+//   io.on("message", (msg) => {
+//     console.log(msg);
+
+//     // Broadcast the message to all connected clients
+//     io.emit("message", msg);
+//   });
+// });
+
+io.on("connection", (socket) => {
+  console.log("Connected to socket.io");
+  socket.on("setup", (userData) => {
+    socket.join(userData.userId);
+    console.log(userData);
+  });
+
+  socket.on("join chat", (room) => {
+    console.log("User Joined Room: " + room);
+    socket.join(room);
+  });
+
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
+  socket.on("new message", (newMessageRecieved) => {
+    var chat = newMessageRecieved.chat;
+
+    if (!chat.users) return console.log("chat.users not defined");
+
+    chat.users.forEach((user) => {
+      if (user._id == newMessageRecieved.sender._id) return;
+
+      socket.in(user._id).emit("message recieved", newMessageRecieved);
+    });
+  });
+
+  socket.off("setup", () => {
+    console.log("USER DISCONNECTED");
+    socket.leave(userData._id);
+  });
 });
 
 // Start the Express.js server
