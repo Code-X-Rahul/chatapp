@@ -15,7 +15,7 @@
 }
 
 .chatMiddleContainer {
-  flex: 1;
+  flex-grow: 1;
 }
 
 .chatRightContainer {
@@ -51,7 +51,7 @@
   );
   flex-direction: column-reverse;
   display: flex;
-  padding: 20px;
+  padding-top: 3.5rem;
   justify-content: end;
   overflow: scroll;
   max-height: 80vh;
@@ -71,7 +71,7 @@
   background-color: rgb(207, 251, 255);
   padding: 5px 10px;
   border-radius: 1.2rem;
-  margin: 10px 0;
+  margin: 10px 10px 10px 0;
 }
 
 .friendMessage {
@@ -85,7 +85,7 @@
   background-color: rgb(255, 222, 251);
   padding: 5px 10px;
   border-radius: 1.2rem;
-  margin: 10px 0;
+  margin: 10px 0 10px 10px;
 }
 
 /* BOTTOM CONTAINER */
@@ -104,6 +104,7 @@
 .chatMiddleDiv {
   flex: 1;
   padding: 0 20px;
+  margin: 0 10px;
 }
 
 #messageInput {
@@ -117,7 +118,7 @@
   outline-color: rgb(124, 255, 255);
 }
 
-.bottomtool-Img {
+.chatContainerBottom ion-icon {
   height: 1.5rem;
   width: 1.5rem;
 }

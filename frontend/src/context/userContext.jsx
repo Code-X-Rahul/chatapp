@@ -19,6 +19,10 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   const logoutUser = async () => {
     try {
       await api.delete("/api/v1/auth/logout");
@@ -27,10 +31,6 @@ const UserProvider = ({ children }) => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, logoutUser }}>

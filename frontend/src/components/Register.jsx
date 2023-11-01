@@ -53,11 +53,11 @@ const Register = () => {
   return (
     <>
       <Toaster />
-      <img
+      {/* <img
         className="background"
         src="image/background.jpg"
         alt="Background-image"
-      />
+      /> */}
       <div className="signup-Container">
         <h1>Sign Up</h1>
 

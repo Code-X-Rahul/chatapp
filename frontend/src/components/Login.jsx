@@ -27,6 +27,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       const response = await api.post("/api/v1/auth/login", loginDetails);
+      console.log(response);
 
       if (response.status === 200) {
         toast.dismiss(loading);
@@ -57,11 +58,11 @@ const Login = () => {
   return (
     <>
       <Toaster />
-      <img
+      {/* <img
         className="background"
         src="image/background.jpg"
         alt="Background-image"
-      />
+      /> */}
       <div className="login-Container">
         <h1>Log in</h1>
         toast('Hello World');
