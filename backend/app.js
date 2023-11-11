@@ -1,5 +1,12 @@
 // backend/app.js
 
+
+import session from "express-session";
+import fs from "fs";
+import passport from "passport";
+import path from "path";
+import { initializeSocketIO } from "./socket/index.js";
+
 require("dotenv").config();
 require("express-async-errors");
 
