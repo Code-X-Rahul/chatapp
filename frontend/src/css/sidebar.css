@@ -3,7 +3,7 @@
   grid-template-rows: 100px 5fr 50px;
   justify-content: center;
   background: linear-gradient(to bottom, rgb(77, 203, 207), rgb(231, 47, 182));
-  position: relative;
+  /* position: relative; */
 }
 
 #profilePicture {
@@ -11,6 +11,7 @@
   width: 3rem;
   border-radius: 1.5rem;
   margin-top: 10px;
+  position: relative;
 }
 
 #profilePicture:hover {

@@ -58,11 +58,7 @@ const NavigationContainer = () => {
         </div>
 
         <div className="bottomSidebar">
-          <ion-icon
-            className="sidebarImg"
-            name="settings-outline"
-            onClick={() => setShowSetting(true)}
-          ></ion-icon>
+          <ion-icon className="sidebarImg" name="settings-outline"></ion-icon>
         </div>
       </div>
     </>

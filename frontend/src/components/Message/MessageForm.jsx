@@ -55,11 +55,6 @@ const MessageForm = () => {
               <p className="chatStatus"></p>
             </div>
             <div className="chatRightContainer">
-              <ion-icon className="chattool-img" name="call-outline"></ion-icon>
-              <ion-icon
-                className="chattool-img"
-                name="videocam-outline"
-              ></ion-icon>
               <ion-icon
                 className="chattool-img"
                 name="search-outline"
@@ -90,16 +85,6 @@ const MessageForm = () => {
             )}
           </div>
           <div className="chatContainerBottom">
-            <div className="chatleftDiv">
-              <ion-icon
-                className="bottomtool-Img"
-                name="happy-outline"
-              ></ion-icon>
-              <ion-icon
-                className="bottomtool-Img"
-                name="add-outline"
-              ></ion-icon>
-            </div>
             <form className="chatMiddleDiv" onSubmit={handleSendMessage}>
               <input
                 id="messageInput"
@@ -108,10 +93,16 @@ const MessageForm = () => {
                 value={createMessage}
                 onChange={(e) => setCreateMessage(e.target.value)}
               />
+              <button className="chatRightDiv" disabled={!createMessage.trim()}>
+                <ion-icon
+                  style={{
+                    color: createMessage ? "rgb(124, 255, 255)" : null,
+                  }}
+                  className="bottomtool-Img"
+                  name="send-outline"
+                ></ion-icon>
+              </button>
             </form>
-            <div className="chatRightDiv">
-              <ion-icon className="bottomtool-Img" name="mic"></ion-icon>
-            </div>
           </div>
         </>
       ) : (
