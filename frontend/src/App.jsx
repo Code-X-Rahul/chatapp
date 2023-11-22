@@ -19,10 +19,10 @@ function App() {
       <Route>
         <Route index element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-        </Route> */}
-        <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
         <Route path="/user/verify-email" element={<Verify />} />
       </Route>
     </Routes>

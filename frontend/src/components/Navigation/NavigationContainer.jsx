@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Modal from "../Modal";
+import { useNavigate } from "react-router-dom";
 
 const NavigationContainer = () => {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
 
