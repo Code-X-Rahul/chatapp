@@ -48,6 +48,53 @@
   gap: 20px;
 }
 
+.addPlus-Div {
+  position: relative;
+}
+
+.searchFriendDiv {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  border-radius: 10px;
+  top: 150px;
+  left: 40px;
+  border: 2px solid rgb(230, 230, 230);
+  font-size: 22px;
+}
+
+.searchFriendDiv input {
+  padding: 0 10px;
+  width: 6rem;
+  text-align: center;
+  height: 25px;
+  border-radius: 6px;
+  border: 1px solid black;
+}
+
+.searchFriendDiv input:focus {
+  outline-color: rgb(39, 234, 240);
+}
+
+.searchFriendDiv .button-Div {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+  justify-content: center;
+}
+
+.button-Div button {
+  flex-grow: 1;
+  background-color: rgb(39, 234, 240);
+  padding: 2px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.button-Div button:hover {
+  background-color: rgb(231, 47, 182);
+}
+
 .addContacts {
   display: flex;
   flex-direction: column;
@@ -91,6 +138,7 @@
   display: flex;
   align-items: start;
   justify-content: center;
+  position: relative;
 }
 
 .content {
@@ -140,4 +188,20 @@
   bottom: 0;
   right: 0;
   left: 0;
+}
+
+.content-setting {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  border-radius: 10px;
+  /* top: 40px; */
+  left: 40px;
+  bottom: 40px;
+  border: 2px solid rgb(230, 230, 230);
+  font-size: 22px;
+}
+
+.content-setting li {
+  list-style: none;
 }

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Modal from "../Modal";
 import { useNavigate } from "react-router-dom";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const NavigationContainer = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
+  const [showFriend, setShowFriend] = useState(false);
 
   return (
     <>
@@ -28,15 +30,31 @@ const NavigationContainer = () => {
         </Modal>
         <div className="middleSidebar">
           <ion-icon className="sidebarImg" name="people-outline"></ion-icon>
-          <ion-icon
+          {/* <ion-icon
             className="sidebarImg"
             name="notifications-outline"
-          ></ion-icon>
-          <ion-icon className="sidebarImg addPlusBtn" name="add"></ion-icon>
-          <ion-icon
+          ></ion-icon> */}
+          <div className="addPlus-Div">
+            <ion-icon
+              className="sidebarImg addPlusBtn"
+              name="add"
+              onClick={() => setShowFriend(true)}
+            />
+            <Modal show={showFriend} closeModal={() => setShowFriend(false)}>
+              <form className="searchFriendDiv">
+                <input type="text" placeholder="User ID" />
+                <div className="button-Div">
+                  <button>Search</button>
+                  <button>Cancel</button>
+                </div>
+              </form>
+            </Modal>
+          </div>
+
+          {/* <ion-icon
             className="sidebarImg"
             name="ellipsis-horizontal"
-          ></ion-icon>
+          ></ion-icon> */}
           {/* <div className="addContacts">
             <input
               className="addContactName"
@@ -60,7 +78,20 @@ const NavigationContainer = () => {
         </div>
 
         <div className="bottomSidebar">
-          <ion-icon className="sidebarImg" name="settings-outline"></ion-icon>
+          <ion-icon
+            className="sidebarImg bottom-Setting"
+            name="settings-outline"
+            onClick={() => setShowSetting(true)}
+          ></ion-icon>
+          {/* <IoSettingsOutline /> */}
+
+          <Modal show={showSetting} closeModal={() => setShowSetting(false)}>
+            <div className="content-setting">
+              <ul>
+                <li>Settings</li>
+              </ul>
+            </div>
+          </Modal>
         </div>
       </div>
     </>
