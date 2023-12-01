@@ -1,20 +1,48 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import api from "../api/data";
 
-const Register = ({
-  name,
-  signupEmail,
-  signupPassword,
-  confirmPassword,
-  signupInputHandler,
-  signupHandler,
-}) => {
+const Register = () => {
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [signUpDetails, setSignUpDetails] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const { name, email, password, confirmPassword } = signUpDetails;
+
+  const signupInputHandler = (e) => {
+    setSignUpDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const signupHandler = async () => {
+    try {
+      const response = await api.post("/api/v1/auth/register", signUpDetails);
+      if (response.status == 201) {
+        toast.success(response.data.msg);
+        console.log("asd");
+      }
+      console.log(response.data);
+      setSignUpDetails({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.log(error.response.status);
+      console.log(error.message);
+      console.log(error.response.data.msg);
+      toast.error(error.response.data.msg);
+    }
+  };
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    if (signupPassword === confirmPassword) {
+    if (password === confirmPassword) {
       setPasswordMatch(true);
       signupHandler();
     } else {
@@ -25,11 +53,11 @@ const Register = ({
   return (
     <>
       <Toaster />
-      <img
+      {/* <img
         className="background"
         src="image/background.jpg"
         alt="Background-image"
-      />
+      /> */}
       <div className="signup-Container">
         <h1>Sign Up</h1>
 
@@ -49,7 +77,7 @@ const Register = ({
             type="email"
             placeholder="Email Address"
             required
-            value={signupEmail}
+            value={email}
             onChange={signupInputHandler}
           />
           <input
@@ -59,7 +87,7 @@ const Register = ({
             name="password"
             placeholder="Password"
             required
-            value={signupPassword}
+            value={password}
             onChange={signupInputHandler}
           />
 

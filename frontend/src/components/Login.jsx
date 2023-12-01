@@ -2,22 +2,67 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import api from "../api/data";
 
-const Login = ({ loginInputHandler, loginHandler, email, password }) => {
+const Login = () => {
+  const navigate = useNavigate();
   const [hidePassword, setHidePassword] = useState("false");
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginDetails, setLoginDetails] = useState({
+    email: "",
+    password: "",
+  });
+
+  const loginInputHandler = (e) => {
+    setLoginDetails((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    const loading = toast.loading("Checking For Credentials");
+    setIsLoading(true);
+    try {
+      const response = await api.post("/api/v1/auth/login", loginDetails);
+      console.log(response);
+
+      if (response.status === 200) {
+        toast.dismiss(loading);
+        toast.success("Login Successful");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
+      }
+      setLoginDetails({
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      toast.dismiss(loading);
+      toast.error("Invalid Credentials!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleHidePassword = () => {
     console.log(hidePassword);
     setHidePassword((current) => !current);
   };
+
+  const { email, password } = loginDetails;
+
   return (
     <>
       <Toaster />
-      <img
+      {/* <img
         className="background"
         src="image/background.jpg"
         alt="Background-image"
-      />
+      /> */}
       <div className="login-Container">
         <h1>Log in</h1>
         toast('Hello World');
@@ -39,6 +84,7 @@ const Login = ({ loginInputHandler, loginHandler, email, password }) => {
               name="password"
               placeholder="Password"
               required
+              value={password}
               onChange={loginInputHandler}
             />
             {!hidePassword ? (

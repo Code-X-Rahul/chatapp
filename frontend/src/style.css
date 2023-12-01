@@ -14,6 +14,9 @@ body {
 
 #root {
   width: 100vw;
+  background-image: url(../image/background.jpg);
+  background-size: cover;
+  background-position: center;
 }
 
 .background {

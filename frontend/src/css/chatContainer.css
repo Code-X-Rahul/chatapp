@@ -1,8 +1,10 @@
 .chatContainer {
   background-color: rgb(244, 255, 255);
-  display: grid;
-  grid-template-rows: 70px 1fr 70px;
+  /* display: grid; */
+  /* grid-template-rows: 70px 1fr 70px; */
   border-left: solid 0.5px rgb(190, 190, 190);
+  padding: 70px 0;
+  position: relative;
 }
 
 .chatContainerTop {
@@ -12,10 +14,15 @@
   align-items: center;
   gap: 10px;
   padding: 0 10px;
+  height: 70px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 .chatMiddleContainer {
-  flex: 1;
+  flex-grow: 1;
 }
 
 .chatRightContainer {
@@ -51,10 +58,16 @@
   );
   flex-direction: column-reverse;
   display: flex;
-  padding: 20px;
+  padding-top: 3.5rem;
   justify-content: end;
   overflow: scroll;
-  max-height: 80vh;
+  /* max-height: 80vh; */
+  /* height: 80vh; */
+  position: absolute;
+  top: 70px;
+  bottom: 70px;
+  left: 0;
+  right: 0;
 }
 
 .chatContainerMiddle::-webkit-scrollbar {
@@ -71,7 +84,7 @@
   background-color: rgb(207, 251, 255);
   padding: 5px 10px;
   border-radius: 1.2rem;
-  margin: 10px 0;
+  margin: 10px 10px 10px 0;
 }
 
 .friendMessage {
@@ -85,25 +98,49 @@
   background-color: rgb(255, 222, 251);
   padding: 5px 10px;
   border-radius: 1.2rem;
-  margin: 10px 0;
+  margin: 10px 0 10px 10px;
 }
 
 /* BOTTOM CONTAINER */
+/* .chatContainerBottom {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+} */
 .chatContainerBottom {
   background-color: rgb(255, 255, 255);
   display: flex;
   align-items: center;
   padding: 0 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
 }
 
-.chatleftDiv {
+/* .chatleftDiv {
   display: flex;
   gap: 10px;
-}
+} */
 
 .chatMiddleDiv {
   flex: 1;
   padding: 0 20px;
+  margin: 0 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.chatRightDiv {
+  background-color: transparent;
+  border: 0;
 }
 
 #messageInput {
@@ -117,7 +154,7 @@
   outline-color: rgb(124, 255, 255);
 }
 
-.bottomtool-Img {
-  height: 1.5rem;
-  width: 1.5rem;
+.chatContainerBottom ion-icon {
+  height: 1.6rem;
+  width: 1.6rem;
 }

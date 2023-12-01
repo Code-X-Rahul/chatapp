@@ -1,31 +1,101 @@
-.sidebar{
+.sidebar {
   display: grid;
   grid-template-rows: 100px 5fr 50px;
   justify-content: center;
   background: linear-gradient(to bottom, rgb(77, 203, 207), rgb(231, 47, 182));
+  /* position: relative; */
+}
+
+#profilePicture {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 1.5rem;
+  margin-top: 10px;
   position: relative;
 }
 
-#profilePicture{
-  height: 3rem;
-  width:  3rem;
-  border-radius: 1.5rem;
-  margin-top: 10px;
+#profilePicture:hover {
+  height: 3.1rem;
+  width: 3.1rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.sidebarImg{
+.middleSidebar ion-icon,
+.bottomSidebar ion-icon {
   height: 1.7rem;
   width: 1.7rem;
 }
 
-.middleSidebar{
+#profilePicture {
+  cursor: pointer;
+}
+
+.middleSidebar ion-icon,
+.bottomSidebar ion-icon {
+  cursor: pointer;
+}
+
+.middleSidebar ion-icon:hover,
+.bottomSidebar ion-icon:hover {
+  height: 1.7rem;
+  width: 1.7rem;
+}
+
+.middleSidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
 }
 
-.addContacts{
+.addPlus-Div {
+  position: relative;
+}
+
+.searchFriendDiv {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  border-radius: 10px;
+  top: 150px;
+  left: 40px;
+  border: 2px solid rgb(230, 230, 230);
+  font-size: 22px;
+}
+
+.searchFriendDiv input {
+  padding: 0 10px;
+  width: 6rem;
+  text-align: center;
+  height: 25px;
+  border-radius: 6px;
+  border: 1px solid black;
+}
+
+.searchFriendDiv input:focus {
+  outline-color: rgb(39, 234, 240);
+}
+
+.searchFriendDiv .button-Div {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+  justify-content: center;
+}
+
+.button-Div button {
+  flex-grow: 1;
+  background-color: rgb(39, 234, 240);
+  padding: 2px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.button-Div button:hover {
+  background-color: rgb(231, 47, 182);
+}
+
+.addContacts {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,30 +112,96 @@
   display: none;
 }
 
-.addPlusBtn:hover ~ .addContacts{
+.addPlusBtn:hover ~ .addContacts {
   display: flex;
 }
 .addContactName,
-.addContactId{
+.addContactId {
   width: 10rem;
   padding: 2px 10px;
 }
 
-.buttonDiv{
+.buttonDiv {
   display: flex;
   gap: 10px;
   flex: 1;
 }
 .addBtn,
-.addCancel{
+.addCancel {
   padding: 0 10px;
   width: 4rem;
   background-color: rgb(255, 242, 252);
   border-radius: 10px;
 }
 
-.bottomSidebar{
+.bottomSidebar {
   display: flex;
   align-items: start;
   justify-content: center;
+  position: relative;
+}
+
+.content {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  border-radius: 15px;
+  top: 40px;
+  left: 40px;
+  border: 2px solid rgb(230, 230, 230);
+}
+
+.content ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  font-size: 22px;
+}
+
+/* .content ul :nth-child(3) {
+  border-top: 1px solid black;
+  margin-top: 10px;
+} */
+
+.content ul span {
+  border-bottom: 1px solid black;
+  min-width: 109px;
+}
+
+.content ul li {
+  padding: 0 10px;
+  margin: 5px 0;
+}
+
+.content ul li:hover {
+  cursor: pointer;
+  background-color: rgb(242, 242, 242);
+  border-radius: 10px;
+  font-size: 23px;
+  /* font-weight: 600; */
+}
+
+.overlay {
+  /* background-color: blue; */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.content-setting {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  border-radius: 10px;
+  /* top: 40px; */
+  left: 40px;
+  bottom: 40px;
+  border: 2px solid rgb(230, 230, 230);
+  font-size: 22px;
+}
+
+.content-setting li {
+  list-style: none;
 }
