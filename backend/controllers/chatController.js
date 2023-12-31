@@ -290,6 +290,152 @@ const getGroupChatDetails = async (req, res) => {
   res.status(StatusCodes.OK).json(chat);
 };
 
+const renameGroupChat = async (req, res) => {
+  const { chatId } = req.params;
+  const { name } = req.body;
+
+  // check for chat existence
+  const groupChat = await Chat.findOne({
+    _id: new mongoose.Types.ObjectId(chatId),
+    isGroupChat: true,
+  });
+
+  if (!groupChat) {
+    // throw new ApiError(404, "Group chat does not exist");
+    throw new CustomError.NotFoundError("Group chat does not exist");
+  }
+
+  // only admin can change the name
+  if (groupChat.admin?.toString() !== req.user._id?.toString()) {
+    // throw new ApiError(404, "You are not an admin");
+    throw new CustomError.BadRequestError("You are not an admin");
+  }
+
+  const updatedGroupChat = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $set: {
+        name,
+      },
+    },
+    { new: true }
+  );
+
+  const chat = await Chat.aggregate([
+    {
+      $match: {
+        _id: updatedGroupChat._id,
+      },
+    },
+    ...chatCommonAggregation(),
+  ]);
+
+  const payload = chat[0];
+
+  if (!payload) {
+    // throw new ApiError(500, "Internal server error");
+    throw new CustomError("Internal server error");
+  }
+
+  // logic to emit socket event about the updated chat name to the participants
+  payload?.participants?.forEach((participant) => {
+    // emit event to all the participants with updated chat as a payload
+    emitSocketEvent(
+      req,
+      participant._id?.toString(),
+      ChatEventEnum.UPDATE_GROUP_NAME_EVENT,
+      payload
+    );
+  });
+
+  res.status(StatusCodes.OK).json({ data: chat[0] });
+};
+
+const deleteGroupChat = async (req, res) => {
+  const { chatId } = req.params;
+
+  // check for the group chat existence
+  const groupChat = await Chat.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(chatId),
+        isGroupChat: true,
+      },
+    },
+    ...chatCommonAggregation(),
+  ]);
+
+  const chat = groupChat[0];
+
+  if (!chat) {
+    // throw new ApiError(404, "Group chat does not exist");
+    throw new CustomError.NotFoundError("Group chat does not exist");
+  }
+
+  // check if the user who is deleting is the group admin
+  if (chat.admin?.toString() !== req.user._id?.toString()) {
+    // throw new ApiError(404, "Only admin can delete the group");
+    throw new CustomError.BadRequestError("Only admin can delete the group");
+  }
+
+  await Chat.findByIdAndDelete(chatId); // delete the chat
+
+  await deleteCascadeChatMessages(chatId); // remove all messages and attachments associated with the chat
+
+  // logic to emit socket event about the group chat deleted to the participants
+  chat?.participants?.forEach((participant) => {
+    if (participant._id.toString() === req.user._id.toString()) return; // don't emit the event for the logged in use as he is the one who is deleting
+    // emit event to other participants with left chat as a payload
+    emitSocketEvent(
+      req,
+      participant._id?.toString(),
+      ChatEventEnum.LEAVE_CHAT_EVENT,
+      chat
+    );
+  });
+
+  res.status(StatusCodes.OK).json({ data: [], success: true });
+};
+
+const deleteOneOnOneChat = async (req, res) => {
+  const { chatId } = req.params;
+
+  // check for chat existence
+  const chat = await Chat.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(chatId),
+      },
+    },
+    ...chatCommonAggregation(),
+  ]);
+
+  const payload = chat[0];
+
+  if (!payload) {
+    // throw new ApiError(404, "Chat does not exist");
+    throw new CustomError.NotFoundError("Chat does not exist");
+  }
+
+  await Chat.findByIdAndDelete(chatId); // delete the chat even if user is not admin because it's a personal chat
+
+  await deleteCascadeChatMessages(chatId); // delete all the messages and attachments associated with the chat
+
+  const otherParticipant = payload?.participants?.find(
+    (participant) => participant?._id.toString() !== req.user._id.toString() // get the other participant in chat for socket
+  );
+
+  // emit event to other participant with left chat as a payload
+  emitSocketEvent(
+    req,
+    otherParticipant._id?.toString(),
+    ChatEventEnum.LEAVE_CHAT_EVENT,
+    payload
+  );
+
+  res.status(StatusCodes.OK).json({ data: [], success: true });
+};
+
 module.exports = {
   addNewParticipantInGroupChat,
   createAGroupChat,
