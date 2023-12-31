@@ -4,6 +4,7 @@ const Chat = require("../models/Chat");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const { ChatEventEnum } = require("../constants");
+const { emitSocketEvent } = require("../socket/index");
 
 const chatCommonAggregation = () => {
   return [
@@ -197,4 +198,108 @@ const createOrGetAOneOnOneChat = async (req, res) => {
   });
 
   res.status(StatusCodes.CREATED).json(payload);
+};
+
+const createAGroupChat = async (req, res) => {
+  const { name, participants } = req.body;
+
+  // Check if user is not sending himself as a participant. This will be done manually
+  if (participants.includes(req.user._id.toString())) {
+    // throw new ApiError(
+    //   400,
+    //   "Participants array should not contain the group creator"
+    // );
+    throw new CustomError.BadRequestError(
+      "Participants array should not contain the group creator"
+    );
+  }
+
+  const members = [...new Set([...participants, req.user._id.toString()])]; // check for duplicates
+
+  if (members.length < 3) {
+    // check after removing the duplicate
+    // We want group chat to have minimum 3 members including admin
+    // throw new ApiError(
+    //   400,
+    //   "Seems like you have passed duplicate participants."
+    // );
+    throw new CustomError.BadRequestError(
+      "Seems like you have passed duplicate participants."
+    );
+  }
+
+  // Create a group chat with provided members
+  const groupChat = await Chat.create({
+    name,
+    isGroupChat: true,
+    participants: members,
+    admin: req.user._id,
+  });
+
+  // structure the chat
+  const chat = await Chat.aggregate([
+    {
+      $match: {
+        _id: groupChat._id,
+      },
+    },
+    ...chatCommonAggregation(),
+  ]);
+
+  const payload = chat[0];
+
+  if (!payload) {
+    // throw new ApiError(500, "Internal server error");
+    throw new CustomError("Internal server error");
+  }
+
+  // logic to emit socket event about the new group chat added to the participants
+  payload?.participants?.forEach((participant) => {
+    if (participant._id.toString() === req.user._id.toString()) return; // don't emit the event for the logged in use as he is the one who is initiating the chat
+    // emit event to other participants with new chat as a payload
+    emitSocketEvent(
+      req,
+      participant._id?.toString(),
+      ChatEventEnum.NEW_CHAT_EVENT,
+      payload
+    );
+  });
+
+  res.status(StatusCodes.OK).json(payload);
+};
+
+const getGroupChatDetails = async (req, res) => {
+  const { chatId } = req.params;
+  const groupChat = await Chat.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(chatId),
+        isGroupChat: true,
+      },
+    },
+    ...chatCommonAggregation(),
+  ]);
+
+  const chat = groupChat[0];
+
+  if (!chat) {
+    // throw new ApiError(404, "Group chat does not exist");
+    throw new CustomError.NotFoundError("Group chat does not exist");
+  }
+
+  res.status(StatusCodes.OK).json(chat);
+};
+
+module.exports = {
+  addNewParticipantInGroupChat,
+  createAGroupChat,
+  createOrGetAOneOnOneChat,
+  deleteGroupChat,
+  deleteOneOnOneChat,
+  getAllChats,
+  getGroupChatDetails,
+  leaveGroupChat,
+  removeParticipantFromGroupChat,
+  renameGroupChat,
+  searchAvailableUsers,
 };
