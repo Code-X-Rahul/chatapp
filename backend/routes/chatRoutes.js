@@ -1,5 +1,23 @@
 const express = require("express");
 const router = express.Router();
+const {
+  authenticateUser,
+  authorizePermissions,
+} = require("../middleware/authentication");
+
+const {
+  addNewParticipantInGroupChat,
+  createAGroupChat,
+  createOrGetAOneOnOneChat,
+  deleteGroupChat,
+  deleteOneOnOneChat,
+  getAllChats,
+  getGroupChatDetails,
+  leaveGroupChat,
+  removeParticipantFromGroupChat,
+  renameGroupChat,
+  searchAvailableUsers,
+} = require("../controllers/chatController.js");
 
 const {
   createAGroupChatValidator,
@@ -9,6 +27,8 @@ const {
 const {
   mongoIdPathVariableValidator,
 } = require("../validators/mongoValidators.js");
+
+router.use(authenticateUser);
 
 router.route("/").get(getAllChats);
 
