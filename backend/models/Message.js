@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 // TODO: Add image and pdf file sharing in the next version
-const chatMessageSchema = new mongoose.Schema(
+const chatMessageSchema = new Schema(
   {
     sender: {
       type: Schema.Types.ObjectId,
