@@ -1,6 +1,5 @@
 // backend/app.js
 
-
 require("dotenv").config();
 require("express-async-errors");
 
@@ -23,6 +22,8 @@ const io = new Server(httpServer, {
   },
 });
 
+app.set("io", io); // using set method to mount the `io` instance on the app to avoid usage of `global`
+
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
@@ -32,12 +33,15 @@ const connectDB = require("./db/connect");
 //  routers
 const authRouter = require("./routes/authRoutes");
 const userRouter = require("./routes/userRoutes");
+const chatRouter = require("./routes/chatRoutes");
+const messageRouter = require("./routes/messageRoutes");
 
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
-const User = require("./models/User");
-const { authenticateUser } = require("./middleware/authentication");
+
+//socket io
+const { initializeSocketIO } = require("./socket/index.js");
 
 app.set("trust proxy", 1);
 
@@ -46,6 +50,7 @@ var corsOptions = {
   credentials: true,
 };
 // app.use(cors());
+app.use(express.static("public")); // configure static file to save images locally
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
@@ -54,91 +59,15 @@ app.get("/", (req, res) => {
   res.send("Welcome to the chatapp backend");
 });
 
-app.delete("/", async (req, res) => {
-  const total = await User.deleteMany({});
-  res.json(total);
-});
-
-app.get("/api/v1/getUsers", async (req, res) => {
-  const success = await User.find({});
-  res.json(success);
-});
-
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/messages", messageRouter);
+
+initializeSocketIO(io);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
-
-//chat setup
-
-// io.use((socket, next) => {
-//   // Use the cookie-parser middleware to parse cookies
-//   cookieParser(process.env.JWT_SECRET)(socket.request, socket.request.res, (err) => {
-//     if (err) {
-//       return next(new Error("Cookie parsing failed"));
-//     }
-//     // Call the authenticateUser middleware function
-//     authenticateUser(socket.request, socket.request.res, (err) => {
-//       if (err) {
-//         // If authentication fails, terminate the connection
-//         return next(new Error("Authentication failed"));
-//       }
-//       // If authentication is successful, continue with the connection
-//       next();
-//     });
-//   });
-// });
-
-// io.on("connection", (socket) => {
-//   console.log("connected");
-//   // console.log(socket?.user);
-
-//   socket.on("disconnect", () => {
-//     console.log(`${socket.id} disconnected`);
-//   });
-
-//   io.on("message", (msg) => {
-//     console.log(msg);
-
-//     // Broadcast the message to all connected clients
-//     io.emit("message", msg);
-//   });
-// });
-
-io.on("connection", (socket) => {
-  console.log("Connected to socket.io");
-  socket.on("setup", (userData) => {
-    socket.join(userData.userId);
-    console.log(userData);
-  });
-
-  socket.on("join chat", (room) => {
-    console.log("User Joined Room: " + room);
-    socket.join(room);
-  });
-
-  socket.on("typing", (room) => socket.in(room).emit("typing"));
-
-  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
-
-  socket.on("new message", (newMessageRecieved) => {
-    var chat = newMessageRecieved.chat;
-
-    if (!chat.users) return console.log("chat.users not defined");
-
-    chat.users.forEach((user) => {
-      if (user._id == newMessageRecieved.sender._id) return;
-
-      socket.in(user._id).emit("message recieved", newMessageRecieved);
-    });
-  });
-
-  socket.off("setup", () => {
-    console.log("USER DISCONNECTED");
-    socket.leave(userData._id);
-  });
-});
 
 // Start the Express.js server
 const port = process.env.PORT || 5000;
