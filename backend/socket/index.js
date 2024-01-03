@@ -48,26 +48,29 @@ const initializeSocketIO = (io) => {
   return io.on("connection", async (socket) => {
     try {
       // parse the cookies from the handshake headers (This is only possible if client has `withCredentials: true`)
-      const cookies = cookie.parse(socket.handshake.headers?.cookie || "");
+      // const cookies = cookie.parse(socket.handshake.headers?.cookie || "");
 
-      let token = cookies?.accessToken; // get the accessToken
+      // let token = cookies?.accessToken; // get the accessToken
+      // console.log(token, "token");
+      // if (!token) {
+      //   // If there is no access token in cookies. Check inside the handshake auth
+      // const token = socket.handshake.auth?.token;
+      const user_id = socket.handshake.auth?.user_id;
+      console.log(user_id, "userid");
+      // }
 
-      if (!token) {
-        // If there is no access token in cookies. Check inside the handshake auth
-        token = socket.handshake.auth?.token;
-      }
+      // if (!token) {
+      //   // Token is required for the socket to work
+      //   // throw new ApiError(401, "Un-authorized handshake. Token is missing");
+      //   throw new CustomError.UnauthorizedError(
+      //     "Un-authorized handshake. Token is missing"
+      //   );
+      // }
 
-      if (!token) {
-        // Token is required for the socket to work
-        // throw new ApiError(401, "Un-authorized handshake. Token is missing");
-        throw new CustomError.UnauthorizedError(
-          "Un-authorized handshake. Token is missing"
-        );
-      }
+      // const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // decode the token
 
-      const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // decode the token
-
-      const user = await User.findById(decodedToken?.user_id);
+      // const user = await User.findById(decodedToken?.user._id);
+      const user = await User.findById(user_id);
       //   .select(
       // "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
       //   );
@@ -79,6 +82,7 @@ const initializeSocketIO = (io) => {
           "Un-authorized handshake. Token is invalid"
         );
       }
+      console.log(user);
       socket.user = user; // mount te user object to the socket
 
       // We are creating a room with user id so that if user is joined but does not have any active chat going on.

@@ -41,7 +41,7 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
 //socket io
-const { initializeSocketIO } = require("./socket/index");
+const { initializeSocketIO } = require("./socket/index.js");
 
 app.set("trust proxy", 1);
 
@@ -50,6 +50,7 @@ var corsOptions = {
   credentials: true,
 };
 // app.use(cors());
+app.use(express.static("public")); // configure static file to save images locally
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
@@ -60,10 +61,10 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/chat-app/chats", chatRouter);
-app.use("/api/v1/chat-app/messages", messageRouter);
+app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/messages", messageRouter);
 
-// initializeSocketIO(io);
+initializeSocketIO(io);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
