@@ -6,6 +6,7 @@ const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const { ChatEventEnum } = require("../constants");
 const { emitSocketEvent } = require("../socket/index");
+const CustomResponse = require("../response/custom-response");
 
 /**
  * @description Utility function which returns the pipeline stages to structure the chat message schema with common lookups
@@ -67,12 +68,11 @@ const getAllMessages = async (req, res) => {
       },
     },
   ]);
-
-  res.status(200).json({
-    data: messages,
-    success: true,
-    message: "Messages fetched successfully",
-  });
+  res
+    .status(StatusCodes.OK)
+    .json(
+      CustomResponse(StatusCodes.OK, messages, "Messages fetched successfully!")
+    );
 };
 
 const sendMessage = async (req, res) => {
@@ -156,11 +156,15 @@ const sendMessage = async (req, res) => {
     );
   });
 
-  res.status(StatusCodes.CREATED).json({
-    data: receivedMessage,
-    success: true,
-    message: "Message saved successfully",
-  });
+  res
+    .status(StatusCodes.CREATED)
+    .json(
+      CustomResponse(
+        StatusCodes.CREATED,
+        receivedMessage,
+        "Messages saved successfully!"
+      )
+    );
 };
 
 module.exports = { getAllMessages, sendMessage };

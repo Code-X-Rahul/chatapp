@@ -6,6 +6,7 @@ const CustomError = require("../errors");
 const { ChatEventEnum } = require("../constants");
 const { emitSocketEvent } = require("../socket/index");
 const mongoose = require("mongoose");
+const CustomResponse = require("../response/custom-response");
 
 const chatCommonAggregation = () => {
   return [
@@ -116,7 +117,9 @@ const searchAvailableUsers = async (req, res) => {
     },
   ]);
 
-  res.status(StatusCodes.OK).json({ data: users, success: true });
+  res
+    .status(StatusCodes.OK)
+    .json(CustomResponse(StatusCodes.OK, users, "Users Fetched Successfully!"));
 };
 
 const createOrGetAOneOnOneChat = async (req, res) => {
@@ -126,13 +129,11 @@ const createOrGetAOneOnOneChat = async (req, res) => {
   const receiver = await User.findById(receiverId);
 
   if (!receiver) {
-    // throw new ApiError(404, "Receiver does not exist");
     throw new CustomError.NotFoundError("Receiver does not exist");
   }
 
   // check if receiver is not the user who is requesting a chat
   if (receiver._id.toString() === req.user._id.toString()) {
-    // throw new ApiError(400, "You cannot chat with yourself");
     throw new CustomError.BadRequestError("You cannot chat with yourself");
   }
 
@@ -158,7 +159,9 @@ const createOrGetAOneOnOneChat = async (req, res) => {
 
   if (chat.length) {
     // if we find the chat that means user already has created a chat
-    res.status(StatusCodes.OK).json(chat[0]);
+    res
+      .status(StatusCodes.OK)
+      .json(CustomResponse(StatusCodes.OK, chat[0], "Chat Already Exists"));
   }
 
   // if not we need to create a new one on one chat
@@ -181,7 +184,6 @@ const createOrGetAOneOnOneChat = async (req, res) => {
   const payload = createdChat[0]; // store the aggregation result
 
   if (!payload) {
-    // throw new ApiError(500, "Internal server error");
     throw new CustomError("Internal server error");
   }
 
@@ -199,7 +201,11 @@ const createOrGetAOneOnOneChat = async (req, res) => {
     );
   });
 
-  res.status(StatusCodes.CREATED).json(payload);
+  res
+    .status(StatusCodes.CREATED)
+    .json(
+      CustomResponse(StatusCodes.CREATED, payload, "Chat Created Sucessfully!")
+    );
 };
 
 const createAGroupChat = async (req, res) => {
@@ -207,10 +213,6 @@ const createAGroupChat = async (req, res) => {
 
   // Check if user is not sending himself as a participant. This will be done manually
   if (participants.includes(req.user._id.toString())) {
-    // throw new ApiError(
-    //   400,
-    //   "Participants array should not contain the group creator"
-    // );
     throw new CustomError.BadRequestError(
       "Participants array should not contain the group creator"
     );
@@ -221,10 +223,6 @@ const createAGroupChat = async (req, res) => {
   if (members.length < 3) {
     // check after removing the duplicate
     // We want group chat to have minimum 3 members including admin
-    // throw new ApiError(
-    //   400,
-    //   "Seems like you have passed duplicate participants."
-    // );
     throw new CustomError.BadRequestError(
       "Seems like you have passed duplicate participants."
     );
@@ -251,7 +249,6 @@ const createAGroupChat = async (req, res) => {
   const payload = chat[0];
 
   if (!payload) {
-    // throw new ApiError(500, "Internal server error");
     throw new CustomError("Internal server error");
   }
 
@@ -267,7 +264,11 @@ const createAGroupChat = async (req, res) => {
     );
   });
 
-  res.status(StatusCodes.OK).json(payload);
+  res
+    .status(StatusCodes.CREATED)
+    .json(
+      CustomResponse(StatusCodes.CREATED, payload, "Group Created Sucessfully!")
+    );
 };
 
 const getGroupChatDetails = async (req, res) => {
@@ -285,11 +286,14 @@ const getGroupChatDetails = async (req, res) => {
   const chat = groupChat[0];
 
   if (!chat) {
-    // throw new ApiError(404, "Group chat does not exist");
     throw new CustomError.NotFoundError("Group chat does not exist");
   }
 
-  res.status(StatusCodes.OK).json(chat);
+  res
+    .status(StatusCodes.OK)
+    .json(
+      CustomResponse(StatusCodes.OK, chat, "Group Details Fetched Sucessfully!")
+    );
 };
 
 const renameGroupChat = async (req, res) => {
@@ -303,13 +307,11 @@ const renameGroupChat = async (req, res) => {
   });
 
   if (!groupChat) {
-    // throw new ApiError(404, "Group chat does not exist");
     throw new CustomError.NotFoundError("Group chat does not exist");
   }
 
   // only admin can change the name
   if (groupChat.admin?.toString() !== req.user._id?.toString()) {
-    // throw new ApiError(404, "You are not an admin");
     throw new CustomError.BadRequestError("You are not an admin");
   }
 
@@ -335,7 +337,6 @@ const renameGroupChat = async (req, res) => {
   const payload = chat[0];
 
   if (!payload) {
-    // throw new ApiError(500, "Internal server error");
     throw new CustomError("Internal server error");
   }
 
@@ -350,7 +351,11 @@ const renameGroupChat = async (req, res) => {
     );
   });
 
-  res.status(StatusCodes.OK).json({ data: chat[0] });
+  res
+    .status(StatusCodes.OK)
+    .json(
+      CustomResponse(StatusCodes.OK, chat[0], "Group Renamed Sucessfully!")
+    );
 };
 
 const deleteGroupChat = async (req, res) => {
@@ -370,13 +375,11 @@ const deleteGroupChat = async (req, res) => {
   const chat = groupChat[0];
 
   if (!chat) {
-    // throw new ApiError(404, "Group chat does not exist");
     throw new CustomError.NotFoundError("Group chat does not exist");
   }
 
   // check if the user who is deleting is the group admin
   if (chat.admin?.toString() !== req.user._id?.toString()) {
-    // throw new ApiError(404, "Only admin can delete the group");
     throw new CustomError.BadRequestError("Only admin can delete the group");
   }
 
@@ -396,7 +399,9 @@ const deleteGroupChat = async (req, res) => {
     );
   });
 
-  res.status(StatusCodes.OK).json({ data: [], success: true });
+  res
+    .status(StatusCodes.OK)
+    .json(CustomResponse(StatusCodes.OK, {}, "Group Deleted Sucessfully!"));
 };
 
 const deleteOneOnOneChat = async (req, res) => {
@@ -416,7 +421,6 @@ const deleteOneOnOneChat = async (req, res) => {
   const payload = chat[0];
 
   if (!payload) {
-    // throw new ApiError(404, "Chat does not exist");
     throw new CustomError.NotFoundError("Chat does not exist");
   }
 
@@ -436,7 +440,9 @@ const deleteOneOnOneChat = async (req, res) => {
     payload
   );
 
-  res.status(StatusCodes.OK).json({ data: [], success: true });
+  res
+    .status(StatusCodes.OK)
+    .json(CustomResponse(StatusCodes.OK, {}, "Chat Deleted Sucessfully!"));
 };
 
 const leaveGroupChat = async (req, res) => {
@@ -449,7 +455,6 @@ const leaveGroupChat = async (req, res) => {
   });
 
   if (!groupChat) {
-    // throw new ApiError(404, "Group chat does not exist");
     throw new CustomError.NotFoundError("Group chat does not exist");
   }
 
@@ -457,7 +462,6 @@ const leaveGroupChat = async (req, res) => {
 
   // check if the participant that is leaving the group, is part of the group
   if (!existingParticipants?.includes(req.user?._id)) {
-    // throw new ApiError(400, "You are not a part of this group chat");
     throw new CustomError.BadRequestError(
       "You are not a part of this group chat"
     );
@@ -485,15 +489,14 @@ const leaveGroupChat = async (req, res) => {
   const payload = chat[0];
 
   if (!payload) {
-    // throw new ApiError(500, "Internal server error");
     throw new CustomError.BadRequestError("Internal server error");
   }
 
-  res.status(StatusCodes.OK).json({
-    data: payload,
-    success: true,
-    message: "Left a group successfully",
-  });
+  res
+    .status(StatusCodes.OK)
+    .json(
+      CustomResponse(StatusCodes.OK, payload, "Left a group successfully!")
+    );
 };
 
 const addNewParticipantInGroupChat = async (req, res) => {
@@ -506,13 +509,11 @@ const addNewParticipantInGroupChat = async (req, res) => {
   });
 
   if (!groupChat) {
-    // throw new ApiError(404, "Group chat does not exist");
     throw new CustomError.NotFoundError("Group chat does not exist");
   }
 
   // check if user who is adding is a group admin
   if (groupChat.admin?.toString() !== req.user._id?.toString()) {
-    // throw new ApiError(404, "You are not an admin");
     throw new CustomError.BadRequestError("You are not an admin");
   }
 
@@ -520,7 +521,6 @@ const addNewParticipantInGroupChat = async (req, res) => {
 
   // check if the participant that is being added in a part of the group
   if (existingParticipants?.includes(participantId)) {
-    // throw new ApiError(409, "Participant already in a group chat");
     throw new CustomError.BadRequestError(
       "Participant already in a group chat"
     );
@@ -548,21 +548,17 @@ const addNewParticipantInGroupChat = async (req, res) => {
   const payload = chat[0];
 
   if (!payload) {
-    // throw new ApiError(500, "Internal server error");
     throw new CustomError.BadRequestError("Internal server error");
   }
 
   // emit new chat event to the added participant
   emitSocketEvent(req, participantId, ChatEventEnum.NEW_CHAT_EVENT, payload);
 
-  // return res
-  //   .status(200)
-  //   .json(new ApiResponse(200, payload, "Participant added successfully"));
-  res.status(StatusCodes.OK).json({
-    data: payload,
-    success: true,
-    message: "Participant added successfully",
-  });
+  res
+    .status(StatusCodes.OK)
+    .json(
+      CustomResponse(StatusCodes.OK, payload, "Participant added successfully!")
+    );
 };
 
 const removeParticipantFromGroupChat = async (req, res) => {
@@ -575,13 +571,11 @@ const removeParticipantFromGroupChat = async (req, res) => {
   });
 
   if (!groupChat) {
-    // throw new ApiError(404, "Group chat does not exist");
     throw new CustomError.NotFoundError("Group chat does not exist");
   }
 
   // check if user who is deleting is a group admin
   if (groupChat.admin?.toString() !== req.user._id?.toString()) {
-    // throw new ApiError(404, "You are not an admin");
     throw new CustomError.BadRequestError("You are not an admin");
   }
 
@@ -589,7 +583,6 @@ const removeParticipantFromGroupChat = async (req, res) => {
 
   // check if the participant that is being removed in a part of the group
   if (!existingParticipants?.includes(participantId)) {
-    // throw new ApiError(400, "Participant does not exist in the group chat");
     throw new CustomError.BadRequestError(
       "Participant does not exist in the group chat"
     );
@@ -617,18 +610,21 @@ const removeParticipantFromGroupChat = async (req, res) => {
   const payload = chat[0];
 
   if (!payload) {
-    // throw new ApiError(500, "Internal server error");
     throw new CustomError.BadRequestError("Internal server error");
   }
 
   // emit leave chat event to the removed participant
   emitSocketEvent(req, participantId, ChatEventEnum.LEAVE_CHAT_EVENT, payload);
 
-  res.status(StatusCodes.OK).json({
-    data: payload,
-    success: true,
-    message: "Participant removed successfully",
-  });
+  res
+    .status(StatusCodes.OK)
+    .json(
+      CustomResponse(
+        StatusCodes.OK,
+        payload,
+        "Participant removed successfully!"
+      )
+    );
 };
 
 const getAllChats = async (req, res) => {
@@ -647,11 +643,12 @@ const getAllChats = async (req, res) => {
     },
     ...chatCommonAggregation(),
   ]);
-  res.status(StatusCodes.OK).json({
-    data: chats,
-    success: true,
-    message: "User chats fetched successfully!",
-  });
+
+  res
+    .status(StatusCodes.OK)
+    .json(
+      CustomResponse(StatusCodes.OK, chats, "User chats fetched successfully!")
+    );
 };
 
 module.exports = {

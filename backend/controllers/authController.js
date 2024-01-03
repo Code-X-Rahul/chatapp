@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Token = require("../models/Token");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
+const CustomResponse = require("../response/custom-response");
 const {
   attachCookiesToResponse,
   createTokenUser,
@@ -48,9 +49,12 @@ const register = async (req, res) => {
     origin,
   });
   // send verification token back only while testing in postman!!!
-  res.status(StatusCodes.CREATED).json({
-    msg: "Success! Please check your email to verify account",
-  });
+  // res.status(StatusCodes.CREATED).json({
+  //   msg: "Success! Please check your email to verify account",
+  // });
+  res
+  .status(StatusCodes.CREATED)
+  .json(CustomResponse(StatusCodes.CREATED, {}, "Success! Please check your email to verify account"));
 };
 
 const verifyEmail = async (req, res) => {
@@ -70,7 +74,10 @@ const verifyEmail = async (req, res) => {
 
   await user.save();
 
-  res.status(StatusCodes.OK).json({ msg: "Email Verified" });
+  // res.status(StatusCodes.OK).json({ msg: "Email Verified" });
+  res
+    .status(StatusCodes.OK)
+    .json(CustomResponse(StatusCodes.OK, {}, "Email Verified"));
 };
 
 const login = async (req, res) => {
@@ -106,7 +113,10 @@ const login = async (req, res) => {
     }
     refreshToken = existingToken.refreshToken;
     attachCookiesToResponse({ res, user: tokenUser, refreshToken });
-    res.status(StatusCodes.OK).json({ user: tokenUser });
+    // res.status(StatusCodes.OK).json({ user: tokenUser });
+    res
+      .status(StatusCodes.OK)
+      .json(CustomResponse(StatusCodes.OK, tokenUser, "Login Successfull"));
     return;
   }
 
@@ -119,7 +129,10 @@ const login = async (req, res) => {
 
   attachCookiesToResponse({ res, user: tokenUser, refreshToken });
 
-  res.status(StatusCodes.OK).json({ user: tokenUser });
+  // res.status(StatusCodes.OK).json({ user: tokenUser });
+  res
+    .status(StatusCodes.OK)
+    .json(CustomResponse(StatusCodes.OK, tokenUser, "Login Successfull"));
 };
 const logout = async (req, res) => {
   await Token.findOneAndDelete({ user: req.user.userId });
@@ -132,7 +145,10 @@ const logout = async (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now()),
   });
-  res.status(StatusCodes.OK).json({ msg: "user logged out!" });
+  // res.status(StatusCodes.OK).json({ msg: "user logged out!" });
+  res
+    .status(StatusCodes.OK)
+    .json(CustomResponse(StatusCodes.OK, {}, "user logged out!"));
 };
 
 const forgotPassword = async (req, res) => {
@@ -162,9 +178,12 @@ const forgotPassword = async (req, res) => {
     await user.save();
   }
 
-  res
+  // res
+  //   .status(StatusCodes.OK)
+  //   .json({ msg: "Please check your email for reset password link" });
+    res
     .status(StatusCodes.OK)
-    .json({ msg: "Please check your email for reset password link" });
+    .json(CustomResponse(StatusCodes.OK, {}, "Please check your email for reset password link"));
 };
 const resetPassword = async (req, res) => {
   const { token, email, password } = req.body;
