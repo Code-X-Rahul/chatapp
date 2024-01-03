@@ -7,8 +7,13 @@ const {
   checkPermissions,
 } = require("../utils");
 
+const {
+  getLocalPath,
+  getStaticFilePath,
+  removeLocalFile,
+} = require("../utils/helpers");
+
 const getAllUsers = async (req, res) => {
-  console.log(req.user);
   const users = await User.find({ role: "user" }).select("-password");
   res.status(StatusCodes.OK).json({ users });
 };
@@ -59,12 +64,44 @@ const updateUserPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Success! Password Updated." });
 };
 
-module.exports = {
-  getAllUsers,
-  getSingleUser,
-  showCurrentUser,
-  updateUser,
-  updateUserPassword,
+const updateUserAvatar = async (req, res) => {
+  // Check if user has uploaded an avatar
+  if (!req.file?.filename) {
+    // throw new ApiError(400, "Avatar image is required");
+    throw new CustomError.BadRequestError("Avatar image is required");
+  }
+
+  // get avatar file system url and local path
+  const avatarUrl = getStaticFilePath(req, req.file?.filename);
+  const avatarLocalPath = getLocalPath(req.file?.filename);
+
+  const user = await User.findById(req.user._id);
+
+  let updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+
+    {
+      $set: {
+        // set the newly uploaded avatar
+        avatar: {
+          url: avatarUrl,
+          localPath: avatarLocalPath,
+        },
+      },
+    },
+    { new: true }
+  ).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
+  );
+
+  // remove the old avatar
+  removeLocalFile(user.avatar.localPath);
+
+  res.status(200).json({
+    data: updatedUser,
+    success: true,
+    message: "Avatar updated successfully",
+  });
 };
 
 // update user with findOneAndUpdate
@@ -82,3 +119,12 @@ module.exports = {
 //   attachCookiesToResponse({ res, user: tokenUser });
 //   res.status(StatusCodes.OK).json({ user: tokenUser });
 // };
+
+module.exports = {
+  getAllUsers,
+  getSingleUser,
+  showCurrentUser,
+  updateUser,
+  updateUserPassword,
+  updateUserAvatar,
+};

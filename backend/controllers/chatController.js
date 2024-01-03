@@ -20,11 +20,11 @@ const chatCommonAggregation = () => {
           {
             $project: {
               password: 0,
-              refreshToken: 0,
-              forgotPasswordToken: 0,
-              forgotPasswordExpiry: 0,
-              emailVerificationToken: 0,
-              emailVerificationExpiry: 0,
+              role: 0,
+              verificationToken: 0,
+              verified: 0,
+              passwordToken: 0,
+              passwordTokenExpirationDate: 0,
             },
           },
         ],
@@ -48,7 +48,7 @@ const chatCommonAggregation = () => {
               pipeline: [
                 {
                   $project: {
-                    username: 1,
+                    name: 1,
                     avatar: 1,
                     email: 1,
                   },
@@ -99,7 +99,6 @@ const deleteCascadeChatMessages = async (chatId) => {
 };
 
 const searchAvailableUsers = async (req, res) => {
-  console.log("this");
   const users = await User.aggregate([
     {
       $match: {
@@ -116,7 +115,6 @@ const searchAvailableUsers = async (req, res) => {
       },
     },
   ]);
-  console.log(users, "users");
 
   res.status(StatusCodes.OK).json({ data: users, success: true });
 };
@@ -192,6 +190,7 @@ const createOrGetAOneOnOneChat = async (req, res) => {
     if (participant._id.toString() === req.user._id.toString()) return; // don't emit the event for the logged in use as he is the one who is initiating the chat
 
     // emit event to other participants with new chat as a payload
+
     emitSocketEvent(
       req,
       participant._id?.toString(),
@@ -402,6 +401,7 @@ const deleteGroupChat = async (req, res) => {
 
 const deleteOneOnOneChat = async (req, res) => {
   const { chatId } = req.params;
+  console.log(chatId, "chatId");
 
   // check for chat existence
   const chat = await Chat.aggregate([
@@ -632,11 +632,12 @@ const removeParticipantFromGroupChat = async (req, res) => {
 };
 
 const getAllChats = async (req, res) => {
-  console.log(req.user);
   const chats = await Chat.aggregate([
     {
       $match: {
-        participants: { $elemMatch: { $eq: req.user._id } }, // get all chats that have logged in user as a participant
+        participants: {
+          $elemMatch: { $eq: new mongoose.Types.ObjectId(req.user._id) },
+        }, // get all chats that have logged in user as a participant
       },
     },
     {
@@ -646,7 +647,6 @@ const getAllChats = async (req, res) => {
     },
     ...chatCommonAggregation(),
   ]);
-
   res.status(StatusCodes.OK).json({
     data: chats,
     success: true,
