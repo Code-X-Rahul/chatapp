@@ -16,7 +16,8 @@ const {
 
 router
   .route("/")
-  .get(authenticateUser, authorizePermissions("admin"), getAllUsers);
+  // .get(authenticateUser, authorizePermissions("admin"), getAllUsers);
+  .get(authenticateUser, getAllUsers);
   
   router
   .route("/avatar")
