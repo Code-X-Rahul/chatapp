@@ -50,7 +50,7 @@ var corsOptions = {
   credentials: true,
 };
 // app.use(cors());
-app.use(express.static("public")); // configure static file to save images locally
+// app.use(express.static("public")); // configure static file to save images locally
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
