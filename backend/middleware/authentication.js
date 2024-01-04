@@ -4,8 +4,15 @@ const Token = require("../models/Token");
 const { attachCookiesToResponse } = require("../utils");
 const authenticateUser = async (req, res, next) => {
   const { refreshToken, accessToken } = req.signedCookies;
-  console.log(accessToken, "accessToken");
+  const authHeader = req.headers.authorization;
   try {
+    if (authHeader && authHeader.startsWith("Bearer")) {
+      const token = authHeader.split(" ")[1];
+      const payload = isTokenValid(token);
+      req.user = payload.user;
+      return next();
+    }
+
     if (accessToken) {
       const payload = isTokenValid(accessToken);
       req.user = payload.user;
@@ -19,7 +26,7 @@ const authenticateUser = async (req, res, next) => {
     });
 
     if (!existingToken || !existingToken?.isValid) {
-      throw new CustomError.UnauthenticatedError("Authentication Invalid");
+      throw new CustomError.UnauthenticatedError("Authentication invalid");
     }
 
     attachCookiesToResponse({
