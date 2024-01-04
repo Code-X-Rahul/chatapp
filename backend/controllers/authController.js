@@ -9,6 +9,7 @@ const {
   sendVerificationEmail,
   sendResetPasswordEmail,
   createHash,
+  createJWT,
 } = require("../utils");
 const crypto = require("crypto");
 
@@ -53,8 +54,14 @@ const register = async (req, res) => {
   //   msg: "Success! Please check your email to verify account",
   // });
   res
-  .status(StatusCodes.CREATED)
-  .json(CustomResponse(StatusCodes.CREATED, {}, "Success! Please check your email to verify account"));
+    .status(StatusCodes.CREATED)
+    .json(
+      CustomResponse(
+        StatusCodes.CREATED,
+        {},
+        "Success! Please check your email to verify account"
+      )
+    );
 };
 
 const verifyEmail = async (req, res) => {
@@ -99,7 +106,9 @@ const login = async (req, res) => {
   if (!user.isVerified) {
     throw new CustomError.UnauthenticatedError("Please verify your email");
   }
-  const tokenUser = createTokenUser(user);
+  const accessToken = createJWT({ payload: { user } });
+
+  const tokenUser = createTokenUser(user, accessToken);
 
   // create refresh token
   let refreshToken = "";
@@ -181,10 +190,17 @@ const forgotPassword = async (req, res) => {
   // res
   //   .status(StatusCodes.OK)
   //   .json({ msg: "Please check your email for reset password link" });
-    res
+  res
     .status(StatusCodes.OK)
-    .json(CustomResponse(StatusCodes.OK, {}, "Please check your email for reset password link"));
+    .json(
+      CustomResponse(
+        StatusCodes.OK,
+        {},
+        "Please check your email for reset password link"
+      )
+    );
 };
+
 const resetPassword = async (req, res) => {
   const { token, email, password } = req.body;
   if (!token || !email || !password) {
