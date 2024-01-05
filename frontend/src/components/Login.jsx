@@ -32,9 +32,7 @@ const Login = () => {
       if (response.status === 200) {
         toast.dismiss(loading);
         toast.success("Login Successful");
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1000);
+        navigate("/dashboard");
       }
       setLoginDetails({
         email: "",

@@ -148,10 +148,12 @@
   height: 2rem;
   border-radius: 10px;
   padding-left: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 #messageInput:focus {
-  outline-color: rgb(124, 255, 255);
+  outline-color: rgb(168, 255, 255);
+  /* border: 1px solid; */
 }
 
 .chatContainerBottom ion-icon {

@@ -34,7 +34,7 @@ const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, logoutUser }}>
-      {children}
+      {isLoading ? <h1>Loading..</h1> : children}
     </UserContext.Provider>
   );
 };

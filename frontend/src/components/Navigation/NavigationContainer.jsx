@@ -12,36 +12,38 @@ const NavigationContainer = () => {
   return (
     <>
       <div className="sidebar">
-        <img
-          id="profilePicture"
-          src="image/profilesample.jpg"
-          alt="Profile-Picture"
-          onClick={() => setShow(true)}
-        />
-        <Modal show={show} closeModal={() => setShow(false)}>
-          <div className="content">
-            <ul>
-              <li>Profile</li>
-              <li>Settings</li>
-              <span></span>
-              <li onClick={() => navigate("/")}>Log out</li>
-            </ul>
-          </div>
-        </Modal>
+        <div className="relative">
+          <img
+            id="profilePicture"
+            src="image/profilesample.jpg"
+            alt="Profile-Picture"
+            onClick={() => setShow(true)}
+          />
+          <Modal show={show} closeModal={() => setShow(false)}>
+            <div className="content absolute">
+              <ul>
+                <li>Profile</li>
+                <li>Settings</li>
+                <span></span>
+                <li onClick={() => navigate("/")}>Log out</li>
+              </ul>
+            </div>
+          </Modal>
+        </div>
         <div className="middleSidebar">
           <ion-icon className="sidebarImg" name="people-outline"></ion-icon>
           {/* <ion-icon
             className="sidebarImg"
             name="notifications-outline"
           ></ion-icon> */}
-          <div className="addPlus-Div">
+          <div className="addPlus-Div relative">
             <ion-icon
               className="sidebarImg addPlusBtn"
               name="add"
               onClick={() => setShowFriend(true)}
             />
             <Modal show={showFriend} closeModal={() => setShowFriend(false)}>
-              <form className="searchFriendDiv">
+              <form className="searchFriendDiv absolute">
                 <input type="text" placeholder="User ID" />
                 <div className="button-Div">
                   <button>Search</button>
@@ -77,7 +79,7 @@ const NavigationContainer = () => {
           </div> */}
         </div>
 
-        <div className="bottomSidebar">
+        <div className="bottomSidebar relative">
           <ion-icon
             className="sidebarImg bottom-Setting"
             name="settings-outline"
@@ -86,7 +88,7 @@ const NavigationContainer = () => {
           {/* <IoSettingsOutline /> */}
 
           <Modal show={showSetting} closeModal={() => setShowSetting(false)}>
-            <div className="content-setting">
+            <div className="content-setting absolute">
               <ul>
                 <li>Settings</li>
               </ul>
