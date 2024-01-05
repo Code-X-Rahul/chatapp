@@ -106,9 +106,10 @@ const login = async (req, res) => {
   if (!user.isVerified) {
     throw new CustomError.UnauthenticatedError("Please verify your email");
   }
-  const accessToken = createJWT({ payload: { user } });
 
-  const tokenUser = createTokenUser(user, accessToken);
+  const tokenUser = createTokenUser(user);
+  const accessToken = createJWT({ payload: { user: { ...tokenUser } } });
+  tokenUser.accessToken = accessToken;
 
   // create refresh token
   let refreshToken = "";

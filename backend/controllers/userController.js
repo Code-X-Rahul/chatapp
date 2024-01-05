@@ -14,7 +14,7 @@ const {
 } = require("../utils/helpers");
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find({ }).select("-password");
+  const users = await User.find({}).select("-password");
   res.status(StatusCodes.OK).json({ users });
 };
 
@@ -28,6 +28,7 @@ const getSingleUser = async (req, res) => {
 };
 
 const showCurrentUser = async (req, res) => {
+  console.log(req.user, "showMe");
   res.status(StatusCodes.OK).json({ user: req.user });
 };
 // update user with user.save()
