@@ -8,7 +8,9 @@ const authenticateUser = async (req, res, next) => {
   try {
     if (authHeader && authHeader.startsWith("Bearer")) {
       const token = authHeader.split(" ")[1];
+      console.log(token);
       const payload = isTokenValid(token);
+      console.log(payload);
       req.user = payload.user;
       return next();
     }
